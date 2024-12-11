@@ -1,6 +1,7 @@
 import connectDB from "@/middleware/mongodb";
 import Colleges from "@/models/college.model";
 import { NextResponse } from "next/server";
+import { expandSearchQuery } from "@/utils/collegeAcronyms";
 
 // GET Method
 export const GET = async () => {
@@ -29,46 +30,90 @@ export const GET = async () => {
 
 // POST Method
 export const POST = async (req) => {
-  await connectDB(); // Ensure the database connection is established
+  await connectDB();
   try {
     const body = await req.json();
-    const { course=null, city=null, state=null, naacRanking=null, nba=null, page = 1, limit = 10 } = body;
+    const { course=null, city=null, state=null, naacRanking=null, nba=null, page = 1, limit = 10, search=null } = body;
 
     // Build the query object dynamically
     const query = {};
+
+    // Add search filter with expanded terms
+    if (search) {
+      const expandedTerms = expandSearchQuery(search);
+      const searchQueries = expandedTerms.map(term => ({
+        $or: [
+          { college_name: { $regex: new RegExp(term, 'i') } },
+          { address: { $regex: new RegExp(term, 'i') } },
+          { dept: { $regex: new RegExp(term, 'i') } },
+          { university: { $regex: new RegExp(term, 'i') } }
+        ]
+      }));
+      
+      query.$or = searchQueries;
+    }
 
     // Add city and state filter
     if (city || state) {
       const addressFilters = [];
       if (city) {
-        addressFilters.push({ address: { $regex: new RegExp(city, 'i') } }); // Case-insensitive city match
+        addressFilters.push({ address: { $regex: new RegExp(city, 'i') } });
       }
       if (state) {
-        addressFilters.push({ address: { $regex: new RegExp(state, 'i') } }); // Case-insensitive state match
+        addressFilters.push({ address: { $regex: new RegExp(state, 'i') } });
       }
-      query.$and = addressFilters; // Combine city and state filters
+      if (search) {
+        query.$and = [{ $or: query.$or }, { $and: addressFilters }];
+      } else {
+        query.$and = addressFilters;
+      }
+    }
+
+    // Add course filter
+    if (course) {
+      const courseFilter = { course: { $regex: new RegExp(course, 'i') } };
+      if (query.$and) {
+        query.$and.push(courseFilter);
+      } else if (query.$or) {
+        query.$and = [{ $or: query.$or }, courseFilter];
+      } else {
+        query.course = courseFilter.course;
+      }
     }
 
     // Add NAAC ranking filter
     if (naacRanking) {
-      query.naac = { $eq: naacRanking }; // Exact match
+      const naacFilter = { naac: { $eq: naacRanking } };
+      if (query.$and) {
+        query.$and.push(naacFilter);
+      } else if (query.$or) {
+        query.$and = [{ $or: query.$or }, naacFilter];
+      } else {
+        query.naac = naacFilter.naac;
+      }
     }
 
     // Add NBA filter
     if (nba) {
-      query.nba = { $regex: new RegExp(nba, 'i') }; // Case-insensitive NBA match
+      const nbaFilter = { nba: { $regex: new RegExp(nba, 'i') } };
+      if (query.$and) {
+        query.$and.push(nbaFilter);
+      } else if (query.$or) {
+        query.$and = [{ $or: query.$or }, nbaFilter];
+      } else {
+        query.nba = nbaFilter.nba;
+      }
     }
 
     // Calculate pagination
-    const skip = (page - 1) * limit; // Items to skip for current page
-    const totalCount = await Colleges.countDocuments(query); // Total number of matching documents
+    const skip = (page - 1) * limit;
+    const totalCount = await Colleges.countDocuments(query);
 
-    // Fetch the filtered and paginated data
+    // Fetch the filtered and paginated data with scoring
     const results = await Colleges.find(query)
-      .skip(skip) // Skip the appropriate number of documents
-      .limit(limit); // Limit the number of documents fetched
+      .skip(skip)
+      .limit(limit);
 
-    // Return paginated data along with metadata
     return NextResponse.json(
       {
         colleges: results,
