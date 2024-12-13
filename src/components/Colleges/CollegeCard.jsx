@@ -1,12 +1,10 @@
-"use client"
+"use client";
 import React from "react";
 import Button from "@mui/material/Button";
 import { IoLocationOutline } from "react-icons/io5";
-import { FaRegBuilding } from "react-icons/fa";
+import { FaRegBuilding, FaPhoneAlt } from "react-icons/fa";
 import { PiStudentFill } from "react-icons/pi";
-import { FaPeopleGroup } from "react-icons/fa6";
 import { IoNewspaperOutline } from "react-icons/io5";
-import { FaPhoneAlt } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import Link from "next/link";
 
@@ -15,75 +13,103 @@ export default function CollegeCard({ college }) {
     <div
       id="college-card"
       key={college._id}
-      className="border-b lg:w-[70%] w-full border-gray-300 border rounded-lg p-2 pl-6 pr-6 mb-5 mr-32 ml-20 hover:shadow-2xl transition-shadow"
+      className="border border-gray-300 rounded-lg p-4 mb-2 lg:w-[70%] w-full mx-auto hover:shadow-2xl transition-shadow"
     >
-      <h1 className="text-xl font-bold text-gray-900 text-left">
+      <h1 className="text-xl font-bold text-gray-900 mb-4 text-center lg:text-left">
         {college.college_name}
       </h1>
 
       <div className="flex flex-wrap">
-        <div className="w-1/2">
-          <p
-            className="text-sm text-gray-600 mb-2 text-left flex items-center
-                    "
-          >
-            <IoLocationOutline className="text-orange-500 size-5 mr-1" />
-            <i> {college.address} </i>
-            {/* &nbsp;
-                      {college.university} */}
+        {/* Left Column */}
+        <div className="w-full lg:w-1/2 mb-4 lg:mb-0">
+          <p className="text-sm text-gray-600 mb-4 flex items-center">
+            <FaRegBuilding className="text-orange-500 text-lg mr-2" />
+            <b>Dept: {college.dept}</b>
           </p>
-
-          <p className="text-sm text-gray-600 mb-1 text-left flex items-center">
-            <FaRegBuilding className="text-orange-500 size-5 mr-2" />{" "}
-            <b> Dept: {college.dept} </b>
+          <p className="text-sm text-gray-600 mb-4 flex items-center">
+            <PiStudentFill className="text-orange-500 text-lg mr-2" />
+            Student Intake: {college.intake}
           </p>
-          <p className="text-sm text-gray-600 mb-1 text-left flex items-center">
-            <PiStudentFill className="text-orange-500 size-5 mr-2" /> Student
-            Intake: {college.intake}
-          </p>
-          <p className="text-sm text-gray-600 mb-1 text-left flex items-center">
-            <FaPeopleGroup className="text-orange-500 size-5 mr-2" /> Faculty
-            Count: {college.faculty}
-          </p>
-
-          <div className="text-sm text-gray-600 mb-1 text-left flex items-center ">
-            <IoNewspaperOutline className="text-orange-500 mr-1" /> Admission
-            Criteria:
-            <p>{college.admission_criteria}</p>
+          <div className="text-sm text-gray-600 mb-4 flex items-center">
+            <IoNewspaperOutline className="text-orange-500 text-lg mr-2" />
+            Admission Criteria: <span className="ml-1">{college.admission_criteria}</span>
           </div>
         </div>
 
-        <div className="mt-7">
-          <p className="text-sm text-blue-400 font-bold mb-1 text-left">
-            NIRF Rank: {college.nirf}
-          </p>
-          <p className="text-sm text-blue-400 font-bold mb-1 text-left">
-            NBA: {college.nba}
-          </p>
-          <p className="text-sm text-blue-400 font-bold mb-1 text-left">
-            NAAC: {college.naac}
-          </p>
+        {/* Right Column */}
+        <div className="w-full lg:w-1/2 flex flex-col space-y-2">
+          {/* NIRF Rank */}
+          <div className="flex items-center space-x-2">
+            <img
+              src="https://static.wixstatic.com/media/5e1aab_e511d9d14fb34d4da47f1e9eda71cf69~mv2.png/v1/fill/w_1360,h_378,al_c/NIRF.png"
+              alt="NIRF Logo"
+              className="w-12 h-12 object-contain"
+            />
+            <span className="text-sm text-gray-600">
+              <b>{college.nirf}</b>
+            </span>
+          </div>
+          {/* NBA */}
+          <div className="flex items-center space-x-4">
+            <img
+              src="https://www.tapmi.edu.in/wp-content/uploads/2016/02/nba-logo-300x103.png"
+              alt="NBA Logo"
+              className="w-12 h-12 object-contain"
+            />
+            <span className="text-sm text-gray-600">
+              <b>{college.nba}</b>
+            </span>
+          </div>
+          {/* NAAC */}
+          <div className="flex items-center space-x-4">
+            <img
+              src="https://i0.wp.com/sjbit.edu.in/wp-content/uploads/2021/07/NAAC-Logo-250x250-1.png?ssl=1"
+              alt="NAAC Logo"
+              className="w-12 h-12 object-contain"
+            />
+            <span className="text-sm text-gray-600">
+              <b>A++</b> {college.naac}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Divider */}
+      <hr className="my-2 border-gray-300" />
+
+      {/* Contact Section and Button */}
+      <div className="flex flex-wrap items-center justify-between">
+        {/* Contact Section */}
+        <div className="flex flex-wrap items-center space-x-4 mb-4 lg:mb-0">
+          <div className="relative group">
+            <FaPhoneAlt className="text-orange-400 text-lg cursor-pointer" />
+            <div className="absolute left-1/2 transform -translate-x-1/2 -top-8 bg-gray-800 text-white text-xs py-1 px-3 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+              {college.contact}
+            </div>
+          </div>
+          <div className="h-6 border-l border-gray-400 hidden lg:block"></div>
+          <div className="relative group">
+            <MdEmail className="text-orange-400 text-lg cursor-pointer" />
+            <div className="absolute left-1/2 transform -translate-x-1/2 -top-8 bg-gray-800 text-white text-xs py-1 px-3 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+              {college.email}
+            </div>
+          </div>
+          <div className="h-6 border-l border-gray-400 hidden lg:block"></div>
+          <div className="flex items-center">
+            <IoLocationOutline className="text-orange-400 text-lg mr-2" />
+            <span className="text-sm text-gray-600 italic">{college.address}</span>
+          </div>
         </div>
 
-        <hr className="w-full mb-2" />
-
-        <div>
-          <p className="text-sm text-gray-600 mb-1 text-left flex items-center">
-            <FaPhoneAlt className="mr-2 text-orange-400 size-4" />{" "}
-            {college.contact}
-          </p>
-          <p className="text-sm text-gray-600 mb-1 text-left flex items-center">
-            <MdEmail className="mr-2 text-orange-400 size-5" /> {college.email}
-          </p>
-        </div>
-
-        <div className="flex justify-end mt-2 ml-auto mb-1">
-          <Link href={college.website} target="_blank" rel="noopener noreferrer">
-            <Button variant="contained" className="text-blue-800">
-              Know more
-            </Button>
-          </Link>
-        </div>
+        {/* Button */}
+        <Link href={college.website} target="_blank" rel="noopener noreferrer">
+          <Button
+            variant="contained"
+            className="text-blue-800 bg-blue-100 py-2 px-4 w-full sm:w-auto"
+          >
+            Know more
+          </Button>
+        </Link>
       </div>
     </div>
   );
