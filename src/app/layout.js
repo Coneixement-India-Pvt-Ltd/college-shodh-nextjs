@@ -2,6 +2,7 @@ import Header from '@/components/header/Header';
 import './globals.css';
 import Footer from '@/components/footer/Footer';
 import { SearchProvider } from '@/context/SearchContext';
+import { CollegeProvider } from '@/context/CollegContext';
 
 export const metadata = {
   title: 'Next.js',
@@ -13,9 +14,11 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
         <SearchProvider>
+          <CollegeProvider>
           <Header />
           {children}
           <Footer />
+          </CollegeProvider>
         </SearchProvider>
       </body>
     </html>
