@@ -9,6 +9,8 @@ import CollegeCard from "@/components/Colleges/CollegeCard";
 import MyModal from "@/components/Modals/Modal";
 import useDebounce from "../hooks/useDebounce";
 import { SearchContext } from "@/context/SearchContext";
+import { CollegeContext } from "@/context/CollegContext";
+import { ApiConfig } from "@/config/ApiConfig";
 
 
 const Options = [
@@ -28,14 +30,13 @@ function Colleges() {
   const [filterNaac, setFilterNaac] = useState("");
   const [sortOrder, setSortOrder] = useState("");
   const [selectedState, setSelectedState] = useState("");
-  const [selectedCity, setSelectedCity] = useState("");
-  const [selectedCourse, setSelectedCourse] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const [openFilters, setOpenFilters] = useState(false);
 
   const { searchTerm, setSearchTerm } = useContext(SearchContext);
+  const { selectedCity, setSelectedCity, selectedCourse, setSelectedCourse } = useContext(CollegeContext);
 
   // Debounced search term to optimize API calls
   const debouncedSearchTerm = useDebounce(search, 500);
@@ -45,7 +46,7 @@ function Colleges() {
     setLoading(true);
     try {
       const response = await axios.get(
-        "http://localhost:3000/api/colleges"
+        ApiConfig.colleges
       );
       setColleges(response.data.colleges || []);
       setTotalPages(response.data.pagination.totalPages)
@@ -62,7 +63,7 @@ function Colleges() {
     setLoading(true);
 
     try {
-      const response = await axios.post("http://localhost:3000/api/colleges", {
+      const response = await axios.post(ApiConfig.colleges, {
         search: search,
         course: selectedCourse,
         naac: filterNaac,
@@ -86,9 +87,9 @@ function Colleges() {
     fetchFilteredColleges();
   }, [ debouncedSearchTerm, filterNaac, selectedState, selectedCity, selectedCourse, currentPage]);
 
-  useEffect(() => {
-    fetchAllColleges();
-  }, [])
+  // useEffect(() => {
+  //   fetchAllColleges();
+  // }, [])
 
   useEffect(() => {
     setSearch(searchTerm)
