@@ -1,4 +1,4 @@
-import connectDB from "@/middleware/mongodb";
+import connectDB from "@/config/mongodb";
 import Colleges from "@/models/college.model";
 import { expandSearchQuery } from "@/utils/searchHeplerFunction";
 import { NextResponse } from "next/server";
