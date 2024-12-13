@@ -1,21 +1,27 @@
 "use client"
 import React, { useState } from "react";
+import { CollegeContext } from "@/context/CollegContext";
 import MyModal from "../Modals/Modal";
 import Link from "next/link";
+import { useContext } from "react";
 
 
 const Options = [
-  { text: "B.Arch", img: "./programs/barch.png", link: "#" },
-  { text: "B.Pharm", img: "./programs/bphram.png", link: "#" },
-  { text: "BCA", img: "./programs/bca.png", link: "#" },
-  { text: "BE/B.Tech", img: "./programs/be-btech.png", link: "#" },
-  { text: "B.Sc", img: "./programs/bsc.png", link: "#" },
+  { text: "B.Arch", img: "./programs/barch.png",course: "Architecture", link: "#" },
+  { text: "B.Pharm", img: "./programs/bphram.png", course: "Pharmacy", link: "#" },
+  { text: "BCA", img: "./programs/bca.png", course: "BCA", link: "#", link: "#" },
+  { text: "BE/B.Tech", img: "./programs/be-btech.png", course: "Engineering", link: "#" },
+  { text: "B.Sc", img: "./programs/bsc.png", course: "Science", link: "#" },
 ];
 
 const Programs = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedType, setSelectedType] = useState("BSc"); // Default to BSc
+  const {selectedCity, setSelectedCity, selectedCourse, setSelectedCourse} = useContext(CollegeContext)
 
+  const handleCityClick = (cityName) => {
+    setSelectedCourse(cityName);
+  };
   const closeModal = (e) => {
     setShowModal(false);    
     if (e.name){
@@ -23,6 +29,8 @@ const Programs = () => {
     }    
     e.stopPropagation();
   }
+
+
   const openModal = (type) => {
     setShowModal(true);
     setSelectedType(type);    
@@ -48,19 +56,11 @@ const Programs = () => {
 
       <div className="mt-5 mb-5 flex flex-wrap justify-center gap-4">
         {Options.map((option, index) => (
-          <Link href={option.link} key={index}>
+          <Link  href={`/colleges`} key={index}>
             <button
+              onClick={() => handleCityClick(option.course)}
               className="h-28 w-52 bg-gray-200 border border-black rounded-lg flex flex-col items-center justify-center hover:shadow-xl hover:bg-slate-300 transition-all"
-              onClick={ () => {
-
-                if(option.text === "B.Sc" || option.text === "BE/B.Tech"){
-                    openModal(option.text === "B.Sc" ? "BSc" : "BE/B.Tech")
-                }
-                else{
-                  redirectCourse(option.text)
-                }
-
-              }}
+              
             >
               <img
                 src={option.img}
