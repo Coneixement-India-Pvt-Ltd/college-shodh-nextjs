@@ -68,7 +68,7 @@ export default function CollegeCard({ college }) {
               className="w-12 h-12 object-contain"
             />
             <span className="text-sm text-gray-600">
-              <b>A++</b> {college.naac}
+               {college.naac}
             </span>
           </div>
         </div>
