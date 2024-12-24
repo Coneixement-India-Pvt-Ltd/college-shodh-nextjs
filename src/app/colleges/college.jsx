@@ -85,7 +85,7 @@ function Colleges() {
   // Use effect to fetch data
   useEffect(() => {
     fetchFilteredColleges();
-  }, [ debouncedSearchTerm, filterNaac, selectedState, selectedCity, selectedCourse, currentPage]);
+  }, [debouncedSearchTerm, filterNaac, selectedState, selectedCity, selectedCourse, currentPage]);
 
   // useEffect(() => {
   //   fetchAllColleges();
@@ -180,7 +180,7 @@ function Colleges() {
 
       {/* buttons */}
       <div className="flex flex-col items-center">
-        <div className="mt-5 mb-5 btn-container md:flex justify-center gap-x-3 grid grid-cols-3">
+        <div className=" mt-5 mb-5 mx-auto btn-container md:flex justify-center gap-x-4 gap-y-2 grid grid-cols-3">
           {Options.map((option, index) => (
             <button
               className={`h-12 w-32 border border-black-100 rounded-md hover:drop-shadow-lg ${selectedCourse === option.course ? 'bg-orange-600' : 'bg-[#1976D2]'}`}
@@ -203,9 +203,11 @@ function Colleges() {
 
       <h1 className="text-xl font-bold text-black flex justify-center font-mono">
         {selectedCourse ? (
-          <>
-            Follow Your Passion in:{" "}
+          <> 
+          <p className="w-full text-left text-xl px-2">
+            Follow Your Passion in:
             <span className="text-orange-600 underline">{selectedCourse}</span>
+          </p>
           </>
         ) : (
           "Follow Your Passion"
@@ -238,9 +240,9 @@ function Colleges() {
           />
         </div>
 
-        <div className="w-full pl-10 flex flex-col mt-3 items-center">
+        <div className="w-full flex flex-col mt-3 items-start justify-start ">
           <button
-            className="bg-blue-500 text-white p-2 rounded-md md:w-[70%] w-full mr-12 mb-4 hover:bg-blue-700 md:hidden"
+            className="bg-blue-500 text-white p-2 rounded-md md:w-[70%] w-[95%] mx-auto mb-4 hover:bg-blue-700 md:hidden"
             onClick={() => setOpenFilters(!openFilters)}
           >
             Filters
@@ -272,11 +274,13 @@ function Colleges() {
             totalPages === 0 ? null
               :
               (
+                <div className="w-full flex justify-center items-center p-8 pr-8 md:pr-32">
                 <Pagination
                   currentPage={currentPage}
                   totalPages={totalPages}
                   onPageChange={handlePageChange}
-                />
+                  />
+                </div>
               )
           }
         </div>
