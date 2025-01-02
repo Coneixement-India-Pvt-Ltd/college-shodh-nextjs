@@ -38,17 +38,18 @@ export default function CollegeCard({ college }) {
 
         {/* Right Column */}
         <div className="w-full lg:w-1/2 flex flex-col space-y-2">
-          {/* NIRF Rank */}
-          <div className="flex items-center space-x-2">
+          {/* NAAC */}
+          <div className="flex items-center space-x-4">
             <img
-              src="https://static.wixstatic.com/media/5e1aab_e511d9d14fb34d4da47f1e9eda71cf69~mv2.png/v1/fill/w_1360,h_378,al_c/NIRF.png"
-              alt="NIRF Logo"
+              src="https://i0.wp.com/sjbit.edu.in/wp-content/uploads/2021/07/NAAC-Logo-250x250-1.png?ssl=1"
+              alt="NAAC Logo"
               className="w-12 h-12 object-contain"
             />
             <span className="text-sm text-gray-600">
-              <b>{college.nirf}</b>
+               {college.naac}
             </span>
           </div>
+          
           {/* NBA */}
           <div className="flex items-center space-x-4">
             <img
@@ -60,15 +61,16 @@ export default function CollegeCard({ college }) {
               <b>{college.nba}</b>
             </span>
           </div>
-          {/* NAAC */}
-          <div className="flex items-center space-x-4">
+          
+          {/* NIRF Rank */}
+          <div className="flex items-center space-x-2">
             <img
-              src="https://i0.wp.com/sjbit.edu.in/wp-content/uploads/2021/07/NAAC-Logo-250x250-1.png?ssl=1"
-              alt="NAAC Logo"
+              src="https://static.wixstatic.com/media/5e1aab_e511d9d14fb34d4da47f1e9eda71cf69~mv2.png/v1/fill/w_1360,h_378,al_c/NIRF.png"
+              alt="NIRF Logo"
               className="w-12 h-12 object-contain"
             />
             <span className="text-sm text-gray-600">
-               {college.naac}
+              <b>{college.nirf}</b>
             </span>
           </div>
         </div>
